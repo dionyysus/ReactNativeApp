@@ -16,31 +16,24 @@ import {
 import colors from '../../consts/colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import shoppingList from '../../consts/shoppingList';
+import {saveListToStorage} from '../Home/Home.js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { parse } from '@babel/core';
+import { emptyCartStorage } from '../../consts/storage';
 
 const width = Dimensions.get('screen').width / 2 - 30;
 
 const Cart = ({navigation}) => {
-  
   const [productIndex, setProductIndex] = React.useState(0);
-  
-  // React.useEffect(() => {
-  //   const productIndex = localStorage.getItem('productIndex')
-  //   setEmployees(JSON.parse(productIndex))
-  // })
 
-  // React.useEffect(() => {
-  //   localStorage.setItem('productIndex', JSON.stringify(productIndex))
-  // })
   const Card = ({product}) => {
     return (
-      
-    <TouchableOpacity
-       >
+      <TouchableOpacity>
         <View style={style.card}>
-          <View style={{ alignItems: 'flex-end' }}></View>
-          <View style={{ height: 100, alignItems: 'center' }}>
+          <View style={{alignItems: 'flex-end'}}></View>
+          <View style={{height: 100, alignItems: 'center'}}>
             <Image
-              style={{ flex: 1, resizeMode: 'contain' }} 
+              style={{flex: 1, resizeMode: 'contain'}}
               source={product.image}
             />
           </View>
@@ -53,26 +46,29 @@ const Cart = ({navigation}) => {
               marginLeft: 25,
             }}>
             {product.name}
-
-
           </Text>
-         <View style = {{height:100, marginTop: 5, marginLeft: 7, width: 120}}>
-          <Button color = 'blueviolet' title= "Remove" onPress={()=>
-          {
-            let sonuc = shoppingList.indexOf(product);
-            setProductIndex(sonuc);
-            delete shoppingList[sonuc];
-          }
-          } />
-        </View>
-       </View>
 
+          
+          <View style={{height: 100, marginTop: 5, marginLeft: 7, width: 120}}>
+            <Button
+              color="blueviolet"
+              title="Remove"
+              onPress={() => {
+                let sonuc = shoppingList.indexOf(product);
+                setProductIndex(sonuc);
+                // saveListToStorage();
+                emptyCartStorage();
+                delete shoppingList[sonuc];
+              }}
+            />
+          </View>
+        </View>
       </TouchableOpacity>
-      
     );
   };
 
-
+  
+ 
   return (
     <SafeAreaView
       style={{
@@ -85,14 +81,12 @@ const Cart = ({navigation}) => {
           <Icon
             name="arrow-left"
             size={24}
-            onPress={() => navigation.goBack()}
+            onPress={() => 
+              navigation.goBack() }
           />
           <Text style={style.textStyle1}>Shopping Cart</Text>
         </View>
-        <Icon
-          name="shopping-cart"
-          size={28}
-        />
+        <Icon name="shopping-cart" size={28} />
       </View>
       <View style={{marginTop: 30, flexDirection: 'row'}}>
         <View style={style.searchContainer}>
@@ -100,9 +94,9 @@ const Cart = ({navigation}) => {
           <TextInput placeholder="Search" style={style.input} />
         </View>
       </View>
-      
+
       <FlatList
-        columnWrapperStyle={{ justifyContent: 'space-between' }}
+        columnWrapperStyle={{justifyContent: 'space-between'}}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           marginTop: 10,
@@ -110,12 +104,10 @@ const Cart = ({navigation}) => {
         }}
         numColumns={2}
         data={shoppingList}
-        renderItem={({ item }) => {  
+        renderItem={({item}) => {
           return <Card product={item} />;
         }}
       />
-      
-     
     </SafeAreaView>
   );
 };
@@ -178,7 +170,7 @@ const style = StyleSheet.create({
     borderColor: 'pink',
   },
   card: {
-    height: 225,    //buton boyutu 
+    height: 225, //buton boyutu
     backgroundColor: colors.white,
     width,
     marginHorizontal: 2,
@@ -186,16 +178,12 @@ const style = StyleSheet.create({
     marginBottom: 20,
     padding: 15,
     borderRadius: 30,
-  
-  
   },
   imageContainer: {
     flex: 0.5,
     marginTop: 10,
     justifyContent: 'center',
   },
-
-
 });
 
 export default Cart;

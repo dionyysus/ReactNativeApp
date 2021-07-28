@@ -13,15 +13,50 @@ import {
   Image,
   StatusBar,
 } from 'react-native';
-
 import colors from '../../consts/colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import categories from '../../consts/categories';
 import shoppingList from '../../consts/shoppingList';
+import * as fromStorage from '../../consts/storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const width = Dimensions.get('screen').width / 2 - 34;
 
+// const STORAGE_KEY = '@save-taxt'
+
+
+loadCartItemsFromStorage = async () => {
+  await AsyncStorage.getItem('cartDatas').then((result) => (
+      parseCart(result)
+  ));
+}
+
+
+async function parseCart(rawData) {
+let cartItems = JSON.parse(rawData);
+for (t in cartItems) {
+  shoppingList.push(cartItems[t]);
+}
+}
+
+
+saveListToStorage = async () => {
+  let jsonData = JSON.stringify(shoppingList);
+  console.log('saving ');
+  await AsyncStorage.setItem('cartDatas',jsonData);
+}
+
+emptyCartStorage = async () => {
+  await AsyncStorage.clear();
+}
+
+
 const Home = ({navigation}) => {
+
+
+//emptyCartStorage();
+loadCartItemsFromStorage();
+
   const categoriess = [
     'Food ',
     '   Meat & Frozen Food',
@@ -38,7 +73,9 @@ const Home = ({navigation}) => {
   const [categoryIndex, setCategoryIndex] = React.useState(0);
 
   const CategoryList = () => {
+    
     return (
+      
       <View style={style.categoryContainer}>
         <ScrollView horizontal={true} style={{flex: 1}}>
           {categoriess.map((item, index) => (
@@ -60,7 +97,7 @@ const Home = ({navigation}) => {
       </View>
     );
   };
-
+   
   const Card = ({category}) => {
     return (
       <TouchableOpacity>
@@ -82,15 +119,20 @@ const Home = ({navigation}) => {
             }}>
             {category.name}
           </Text>
+
+
           <View style={{height: 100, marginTop: 5, marginLeft: 7, width: 120}}>
             <Button
               color="blueviolet"
               title="Add To Cart"
               onPress={() => {
-                shoppingList.push(category);
+                shoppingList.push(category); 
+                saveListToStorage();
               }}
             />
           </View>
+
+          
         </View>
       </TouchableOpacity>
     );
