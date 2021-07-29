@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {
   View,
-  ScrollView,
   Dimensions,
   FlatList,
   Text,
@@ -16,9 +15,6 @@ import {
 import colors from '../../consts/colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import shoppingList from '../../consts/shoppingList';
-import {saveListToStorage} from '../Home/Home.js';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { parse } from '@babel/core';
 import { emptyCartStorage } from '../../consts/storage';
 
 const width = Dimensions.get('screen').width / 2 - 30;

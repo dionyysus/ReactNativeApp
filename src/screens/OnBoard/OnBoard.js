@@ -3,10 +3,8 @@ import {
   View,
   StyleSheet,
   ImageBackground,
-  StatusBar,
   Text,
   TouchableOpacity,
-  Image,
 } from 'react-native';
 import colors from '../../consts/colors';
 

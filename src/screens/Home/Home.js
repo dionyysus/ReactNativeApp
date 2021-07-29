@@ -11,18 +11,15 @@ import {
   StyleSheet,
   SafeAreaView,
   Image,
-  StatusBar,
 } from 'react-native';
 import colors from '../../consts/colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import categories from '../../consts/categories';
 import shoppingList from '../../consts/shoppingList';
-import * as fromStorage from '../../consts/storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const width = Dimensions.get('screen').width / 2 - 34;
 
-// const STORAGE_KEY = '@save-taxt'
 
 
 loadCartItemsFromStorage = async () => {
